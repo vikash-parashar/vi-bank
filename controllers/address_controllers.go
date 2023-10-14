@@ -2,8 +2,8 @@ package controllers
 
 import (
 	"database/sql"
+	"go-bank/models"
 	"time"
-	"your-app/models"
 
 	"github.com/google/uuid"
 )

@@ -2,22 +2,28 @@ package controllers
 
 import (
 	"database/sql"
+	"go-bank/models"
+	"log"
 	"time"
-	"your-app/models"
 
 	"github.com/google/uuid"
 )
 
 // CreateUser creates a new user.
-func CreateUser(db *sql.DB, userType models.UserType, customerID uuid.UUID, email, password string) (uuid.UUID, error) {
-	query := "INSERT INTO users (user_type, customer_id, email, password, created_at, updated_at) VALUES ($1, $2, $3, $4, $5, $6) RETURNING id"
-	var userID uuid.UUID
+func CreateUser(db *sql.DB, u *models.User) (uuid.UUID, error) {
+	query := "INSERT INTO users (user_id,user_type, customer_id, email, password, created_at, updated_at) VALUES ($1, $2, $3, $4, $5, $6) RETURNING id"
+	if u.UserType == "Customer" {
+		u.CustomerID = u.ID
+	}
+	u.ID = uuid.New()
 	now := time.Now()
-	err := db.QueryRow(query, userType, customerID, email, password, now, now).Scan(&userID)
+	res, err := db.Exec(query, u.ID, u.UserType, u.CustomerID, u.Email, u.Password, now, now)
+
 	if err != nil {
 		return uuid.Nil, err
 	}
-	return userID, nil
+	log.Printf("Rows Affected : %d .\n", res.RowsAffected)
+	return u.ID, nil
 }
 
 // GetUser retrieves a user by ID.
@@ -32,7 +38,7 @@ func GetUser(db *sql.DB, userID uuid.UUID) (*models.User, error) {
 }
 
 // UpdateUser updates user information.
-func UpdateUser(db *sql.DB, userID uuid.UUID, email, password string) error {
+func UpdateUserPassword(db *sql.DB, userID uuid.UUID, email, password string) error {
 	query := "UPDATE users SET email = $1, password = $2, updated_at = $3 WHERE id = $4"
 	now := time.Now()
 	_, err := db.Exec(query, email, password, now, userID)

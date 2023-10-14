@@ -4,7 +4,7 @@ import (
     "database/sql"
     "github.com/google/uuid"
     "time"
-    "your-app/models"
+    "go-bank/models"
 )
 
 // CreateContact creates new customer contact details.
