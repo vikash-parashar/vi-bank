@@ -7,12 +7,12 @@ import (
 )
 
 const (
-	INR     = "INR"
-	USD     = "USD"
-	EUR     = "EUR"
-	Saving  = "Saving"
-	Current = "Current"
-	Salary  = "Salary"
+	INR            = "INR"
+	USD            = "USD"
+	EUR            = "EUR"
+	SavingAccount  = "Saving Account"
+	CurrentAccount = "Current Account"
+	SalaryAccount  = "Salary Account"
 )
 
 type AccountType string
@@ -22,7 +22,8 @@ type Account struct {
 	CustomerID   uuid.UUID     `json:"customer_id"`
 	Balance      float64       `json:"balance"`
 	Currency     string        `json:"currency"`
-	Type         AccountType   `json:"account_type"`
+	AccountType  AccountType   `json:"account_type"`
+	Nominee      Nominee       `json:"nominee"`
 	CreatedAt    time.Time     `json:"created_at"`
 	UpdatedAt    time.Time     `json:"updated_at"`
 	Transactions []Transaction `json:"transactions"`

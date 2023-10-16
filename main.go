@@ -1,44 +1,58 @@
 package main
 
 import (
-	"fmt"
-	"go-bank/routes"
-	"go-bank/storage"
 	"log"
 	"net/http"
-	"os"
+	"vibank/storage"
 
-	"github.com/joho/godotenv"
-	_ "github.com/lib/pq"
-)
-
-var (
-	dsn string
+	"github.com/gorilla/mux"
 )
 
 func init() {
-	if err := godotenv.Load(); err != nil {
-		log.Fatalf("Error loading .env file: %v", err)
+	if err := storage.CreateTablesFromFile("schema.sql", "user=postgres password=postgres dbname=V!Bank sslmode=disable"); err != nil {
+		log.Fatalf("Error: %v\n", err)
+		return
 	}
+}
 
-	dbName := os.Getenv("DB_NAME")
-	dbUser := os.Getenv("DB_USER")
-	dbPassword := os.Getenv("DB_PASSWORD")
-	dbHost := os.Getenv("DB_HOST")
-	dbPort := os.Getenv("DB_PORT")
-	// Create the PostgreSQL DSN
-	dsn = fmt.Sprintf("user=%s password=%s host=%s port=%s dbname=%s sslmode=disable", dbUser, dbPassword, dbHost, dbPort, dbName)
+type Response struct {
+	Status  int    `json:"-"`
+	Message string `json:"message"`
 }
 
 func main() {
-	db, err := storage.ConnectStorage(dsn)
-	if err != nil {
-		log.Fatalln(err)
-	}
-	defer db.Close()
-	router := routes.SetupRoutes(db)
+	r := mux.NewRouter()
+	r.HandleFunc("/", HealthCheck)
+	r.HandleFunc("/user/account/get", GetAccountByUser)
+	r.HandleFunc("/user/account/get-all", GetAllAccount) //TODO: auth needed only admin can get all accounts
+	r.HandleFunc("/user/account/create", CreateAccount)
+	r.HandleFunc("/user/account/update", UpdateAccount)
+	r.HandleFunc("/user/account/delete", DeleteAccount) //TODO: auth needed only admin can get all accounts
 
-	fmt.Println("Server is running on :8080")
-	http.ListenAndServe(":8080", router)
+	http.ListenAndServe(":8080", r)
+}
+
+func HealthCheck(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "text/html")
+	w.Write([]byte("application is running . . . "))
+}
+
+func GetAccountByUser(w http.ResponseWriter, r *http.Request) {
+
+}
+
+func GetAllAccount(w http.ResponseWriter, r *http.Request) {
+
+}
+
+func CreateAccount(w http.ResponseWriter, r *http.Request) {
+
+}
+
+func UpdateAccount(w http.ResponseWriter, r *http.Request) {
+
+}
+
+func DeleteAccount(w http.ResponseWriter, r *http.Request) {
 
 }
