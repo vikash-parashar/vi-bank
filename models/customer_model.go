@@ -1,18 +1,16 @@
 package models
 
 import (
-	"time"
-
-	"github.com/google/uuid"
+	"github.com/gofrs/uuid"
+	"github.com/jinzhu/gorm"
 )
 
 type Customer struct {
-	ID           uuid.UUID     `json:"customer_id"`
-	Account      Account       `json:"account"`
-	Addresses    []Address     `json:"addresses"`
-	KYCDetails   KYCDetails    `json:"kyc_details"`
-	Transactions []Transaction `json:"transactions"`
-	Contact      Contact       `json:"contact"`
-	CreatedAt    time.Time     `json:"created_at"`
-	UpdatedAt    time.Time     `json:"updated_at"`
+	gorm.Model
+	AccountID    uuid.UUID     `gorm:"unique_index"`
+	Account      Account       `json:"account" gorm:"foreignkey:AccountID"`
+	Addresses    []Address     `json:"addresses" gorm:"foreignkey:CustomerID"`
+	KYCDetails   KYCDetails    `json:"kyc_details" gorm:"foreignkey:CustomerID"`
+	Transactions []Transaction `json:"transactions" gorm:"foreignkey:CustomerID"`
+	Contact      Contact       `json:"contact" gorm:"foreignkey:CustomerID"`
 }

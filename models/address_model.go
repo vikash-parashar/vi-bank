@@ -1,25 +1,22 @@
 package models
 
 import (
-	"time"
-
-	"github.com/google/uuid"
+	"github.com/gofrs/uuid"
+	"gorm.io/gorm"
 )
 
 const (
-	Current   = "Current"
-	Permanent = "Permanent"
+	AddressTypeCurrent   = "Current"
+	AddressTypePermanent = "Permanent"
 )
 
 type Address struct {
-	ID          uuid.UUID `json:"address_id"`
-	CustomerID  uuid.UUID `json:"customer_id"`
-	AddressType string    `json:"address_type"`
-	Street      string    `json:"street"`
-	City        string    `json:"city"`
-	State       string    `json:"state"`
-	PinCode     string    `json:"pin_code"`
-	Country     string    `json:"country"`
-	CreatedAt   time.Time `json:"created_at"`
-	UpdatedAt   time.Time `json:"updated_at"`
+	gorm.Model
+	CustomerID uuid.UUID `json:"customer_id"`
+	Type       string    `json:"type"`
+	Street     string    `json:"street"`
+	City       string    `json:"city"`
+	State      string    `json:"state"`
+	PinCode    string    `json:"pin_code"`
+	Country    string    `json:"country"`
 }

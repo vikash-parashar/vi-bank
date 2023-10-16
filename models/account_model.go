@@ -1,30 +1,28 @@
 package models
 
 import (
-	"time"
-
-	"github.com/google/uuid"
+	"github.com/gofrs/uuid"
+	"gorm.io/gorm"
 )
 
 const (
-	INR            = "INR"
-	USD            = "USD"
-	EUR            = "EUR"
-	SavingAccount  = "Saving Account"
-	CurrentAccount = "Current Account"
-	SalaryAccount  = "Salary Account"
+	CurrencyINR    = "INR"
+	CurrencyUSD    = "USD"
+	CurrencyEUR    = "EUR"
+	AccountSaving  = "Saving Account"
+	AccountCurrent = "Current Account"
+	AccountSalary  = "Salary Account"
 )
 
 type AccountType string
 
 type Account struct {
-	ID           uuid.UUID     `json:"account_id"`
+	gorm.Model
 	CustomerID   uuid.UUID     `json:"customer_id"`
 	Balance      float64       `json:"balance"`
 	Currency     string        `json:"currency"`
-	AccountType  AccountType   `json:"account_type"`
+	Type         AccountType   `json:"account_type"`
 	Nominee      Nominee       `json:"nominee"`
-	CreatedAt    time.Time     `json:"created_at"`
-	UpdatedAt    time.Time     `json:"updated_at"`
+	NomineeID    uuid.UUID     `json:"nominee_id"`
 	Transactions []Transaction `json:"transactions"`
 }

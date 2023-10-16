@@ -1,25 +1,23 @@
 package models
 
 import (
-	"time"
-
-	"github.com/google/uuid"
+	"github.com/gofrs/uuid"
+	"github.com/jinzhu/gorm"
 )
 
 const (
-	Success = "Success"
-	Fail    = "Failed"
-	Cancel  = "Canceled"
+	TransactionStatusSuccess  = "Success"
+	TransactionStatusFailed   = "Failed"
+	TransactionStatusCanceled = "Canceled"
 )
 
 type TransactionStatus string
 
 type Transaction struct {
-	ID            uuid.UUID         `json:"transaction_id"`
-	CustomerID    uuid.UUID         `json:"customer_id"`
-	SourceID      uuid.UUID         `json:"source_account_id"`
-	DestinationID uuid.UUID         `json:"destination_account_id"`
-	TxnAmount     float64           `json:"transaction_amount"`
-	Timestamp     time.Time         `json:"timestamp"`
-	Status        TransactionStatus `json:"transaction_status"`
+	gorm.Model
+	CustomerID           uuid.UUID         `json:"customer_id"`
+	SourceAccountID      uuid.UUID         `json:"source_account_id"`
+	DestinationAccountID uuid.UUID         `json:"destination_account_id"`
+	Amount               float64           `json:"amount"`
+	Status               TransactionStatus `json:"status"`
 }

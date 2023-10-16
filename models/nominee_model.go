@@ -3,25 +3,25 @@ package models
 import (
 	"time"
 
-	"github.com/google/uuid"
+	"github.com/jinzhu/gorm"
 )
 
 const (
-	Father   = "Father"
-	Mother   = "Mother"
-	Spouse   = "Husband/Wife"
-	Daughter = "Daughter"
-	Son      = "Son"
-	Sister   = "Sister"
-	Brother  = "Brother"
+	NomineeRelationFather   = "Father"
+	NomineeRelationMother   = "Mother"
+	NomineeRelationSpouse   = "Husband/Wife"
+	NomineeRelationDaughter = "Daughter"
+	NomineeRelationSon      = "Son"
+	NomineeRelationSister   = "Sister"
+	NomineeRelationBrother  = "Brother"
 )
 
+type NomineeRelation string
+
 type Nominee struct {
-	ID          uuid.UUID `json:"nominee_id"`
-	FirstName   string    `json:"nominee_first_name"`
-	LastName    string    `json:"nominee_last_name"`
-	DateOfBirth time.Time `json:"nominee_date_of_birth"`
-	Relation    string    `json:"relation_with_nominee"`
-	CreatedAt   time.Time `json:"created_at"`
-	UpdatedAt   time.Time `json:"updated_at"`
+	gorm.Model
+	FirstName   string          `json:"first_name"`
+	LastName    string          `json:"last_name"`
+	DateOfBirth time.Time       `json:"date_of_birth"`
+	Relation    NomineeRelation `json:"relation"`
 }
